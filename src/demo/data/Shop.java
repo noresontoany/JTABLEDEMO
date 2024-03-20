@@ -6,14 +6,14 @@ public class Shop {
     public  ArrayList<Product> products = new ArrayList<>();
     public Shop()
     {
-        products.add(new Milk("bread", 1,"1488"));
-        products.add(new Bread("milky", 3,"228"));
-        products.add(new Milk("bread", 45,"1488"));
-        products.add(new Bread("milky", 56,"228"));
-        products.add(new Milk("bread", 34,"1488"));
-        products.add(new Bread("milky", 234,"228"));
-        products.add(new Bread("milky", 223,"228"));
-        products.add(new Bread("milky", 123,"228"));
+        products.add(new Milk("bread", 1,"ggg"));
+        products.add(new Bread("milky", 3,"ddd"));
+        products.add(new Milk("bread", 45,"sad"));
+        products.add(new Bread("milky", 56,"asd"));
+        products.add(new Milk("bread", 34,"asd"));
+        products.add(new Bread("milky", 234,"sdf"));
+        products.add(new Bread("milky", 223,"sdfsd"));
+        products.add(new Bread("milky", 123,"asd"));
     }
 
 
