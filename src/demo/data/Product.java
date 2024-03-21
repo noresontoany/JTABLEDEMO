@@ -1,15 +1,18 @@
 package demo.data;
 
-import java.util.regex.PatternSyntaxException;
-
 public abstract class Product {
     protected String name;
     protected int count;
+    protected static int id_count;
+    protected int id;
 
-    public Product(String name, int count )
+
+    public Product(String name, int count)
     {
         this.count = count;
         this.name = name;
+        this.id_count++;
+        this.id = id_count;
     }
 
     public String getName() {
@@ -26,18 +29,24 @@ public abstract class Product {
 
     public void setCount(String count)
     {
-            try{
+            try
+            {
                 this.count = Integer.parseInt(count);
             }
             catch (NumberFormatException ex)
             {
-                System.err.println("Bad regex pattern");
+                System.err.println("");
             }
     }
 
     public void setCountInt(Integer count)
     {
         this.count = count;
+    }
+
+    public int getId()
+    {
+        return id;
     }
 }
 

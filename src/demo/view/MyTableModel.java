@@ -6,16 +6,48 @@ import demo.data.Bread;
 import demo.data.Shop;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
 
 public class MyTableModel extends AbstractTableModel {
     public Shop data;
+    public int Mycnt;
+    public ArrayList<Milk> shopM = new ArrayList<>();
+    public ArrayList<Bread> shopB = new ArrayList<>();
+
+    protected  boolean P;
     public MyTableModel(Shop shop)
     {
         this.data = shop;
+
+        for (int i =  0 ; i < data.getCount();i++ )
+        {
+            if (data.getProduct(i) instanceof Milk)
+            {
+                shopM.add((Milk)data.getProduct(i));
+            }
+            else
+            {
+                shopB.add((Bread)data.getProduct(i));
+            }
+
+        }
+
     }
+
+    public void setMycnt(int cnt)
+    {
+        this.Mycnt = cnt;
+
+
+    }
+
+
     @Override
     public int getRowCount() {
-        return data.getCount();
+
+
+        return Mycnt;
+
     }
 
     @Override
@@ -26,15 +58,29 @@ public class MyTableModel extends AbstractTableModel {
     @Override
     public String getColumnName(int column) {
 
-        switch (column){
-            case 0: return "Название";
-            case 1:
-                return "кол-во";
-            case 2:
-                return "тип муки";
-            case 3:
-                return "тип молока";
+        if (P)
+            switch (column) {
+                case 0:
+                    return "id";
+                case 1:
+                    return "название";
+                case 2:
+                    return "кол-во";
+                case 3:
+                    return "тип";
+            }
+        else {
+            switch (column){
+                case 0: return "id";
+                case 1:
+                    return "название";
+                case 2:
+                    return "кол-во";
+                case 3:
+                    return "тип";
+            }
         }
+
         return "";
     }
 
@@ -42,43 +88,48 @@ public class MyTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
 
-        switch (columnIndex){
 
-            case 0: return data.getProduct(rowIndex).getName();
 
-            case 1: return data.getProduct(rowIndex).getCount();
+        if (P) {
+            switch (columnIndex) {
+                case 0: return shopB.get(rowIndex).getId();
 
-            case 2 :
-            {
-                    Product p = data.getProduct(rowIndex);
-                    if (p instanceof Milk)
-                    {
-                        return ((Milk) p).getProd_type();
-                    }
-                    else {
-                        return "no";
-                    }
-            }
+                case 1: return shopB.get(rowIndex).getName();
 
-            case 3:
-            {
-                Product p = data.getProduct(rowIndex);
-                if (p instanceof Bread)
-                {
-                    return ((Bread) p).getFlour();
-                }
-                else {
-                    return "no";
-                }
+                case 2: return shopB.get(rowIndex).getCount();
+
+                case 3:
+
+                    Product p1 = shopB.get(rowIndex);
+
+                    return ((Bread) p1).getFlour();
+
             }
         }
-        return "default";
+        else {
+            switch (columnIndex) {
+
+                case 0: return shopM.get(rowIndex).getId();
+
+                case 1: return shopM.get(rowIndex).getName();
+
+                case 2: return shopM.get(rowIndex).getCount();
+
+                case 3:
+
+                    Product p2 = shopM.get(rowIndex);
+
+                    return ((Milk) p2).getProd_type();
+
+            }
+        }
+                return "";
     }
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
 
-        if (columnIndex == 1)
+        if (columnIndex == 0 || columnIndex == 2)
         {
             return Integer.class;
         }
@@ -105,7 +156,6 @@ public class MyTableModel extends AbstractTableModel {
                     }
 
                 }
-
                 case 3: {
                     Product p = data.getProduct(rowIndex);
                     if (p instanceof Bread) {
@@ -126,15 +176,9 @@ public class MyTableModel extends AbstractTableModel {
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         switch (columnIndex)
         {
-            case 0: return true;
+            case 0: return false;
 
-            case 1: return true;
-
-            case 2: return true;
-
-            case 3: return true;
-
-
+            case 1, 2, 3: return true;
         }
 
         return false;
@@ -147,13 +191,13 @@ public class MyTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void addMIlk() {
-        data.add(new Milk());
+    public void addMIlk(String name, int cnt, String type) {
+        data.add(new Milk(name, cnt, type));
         this.fireTableDataChanged();
     }
 
-    public void addBread() {
-        data.add(new Bread());
+    public void addBread(String name, int cnt, String type) {
+        data.add(new Bread(name, cnt, type));
         this.fireTableDataChanged();
     }
 

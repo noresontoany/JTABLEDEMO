@@ -1,8 +1,12 @@
 package demo.view;
 
+import demo.data.Bread;
+import demo.data.Milk;
 import demo.data.Shop;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,25 +15,16 @@ import java.util.regex.PatternSyntaxException;
 
 public class MainWindow extends JFrame {
     private JTable jTable;
-    private MyTableModel myTableModelMilk;
-    private MyTableModel myTableModelBread;
-
-    private   JButton  buttonAddMlk;
-
+    private MyTableModel myTableModel;
+    private JButton  buttonAddMlk;
     private JButton buttonAddBread;
-
-    private   JButton  showMlk;
-
+    private JButton  showMlk;
     private JButton showBread;
-
-
-////    private JButton buttonDelete;
-//    private JButton buttonFilter;
-//    private JButton  button_back;
-//    private JButton  addBread;
-//    private JButton  addMilk;
-
+    private JButton buttonDelete;
+    private JButton buttonFilter;
+    private JButton  button_back;
     private JDialog milkDialog;
+    private JDialog breadDialog ;
     JTextField filterText;
 
     public MainWindow()
@@ -38,34 +33,263 @@ public class MainWindow extends JFrame {
 
         jTable = new JTable();
 
-        JPanel panel = new JPanel(new BorderLayout());
 
+        JPanel panel = new JPanel(new GridLayout(4, 1, 30, 30));
+        myTableModel = new MyTableModel(new Shop());
         buttonAddBread = new JButton("Bread add");
-
         buttonAddMlk = new JButton("Milk add");
+        showBread = new JButton("show Bread");
+        showMlk = new JButton("show Millk");
 
-        showBread = new JButton("Bread show");
 
-        showMlk = new JButton("Milk show");
 
-        panel.add(buttonAddBread, BorderLayout.NORTH);
 
-        panel.add(buttonAddMlk, BorderLayout.WEST);
 
-        panel.add(showBread, BorderLayout.EAST);
 
-        panel.add(showMlk, BorderLayout.SOUTH);
 
-        this.add(panel, BorderLayout.NORTH);
 
+        buttonDelete = new JButton("Delete");
+        buttonFilter = new JButton("Filter");
+        button_back = new JButton("Back");
+        filterText = new JTextField();
+
+
+
+        panel.setBackground(Color.darkGray);
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+        panel.add(buttonAddBread);
+        panel.add(buttonAddMlk);
+        panel.add(showBread);
+        panel.add(showMlk);
+
+
+
+        this.add(panel, BorderLayout.CENTER);
+        this.pack();
         this.setSize(300, 250);
-
         this.setVisible(true);
 
 
 
 
 
+        showBread.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int cnt = 0;
+                myTableModel.P = true;
+                for (int i =  0 ; i < myTableModel.data.getCount();i++ )
+                {
+                    if (myTableModel.data.getProduct(i) instanceof Bread)
+                    {
+                        cnt++;
+                    }
+
+                }
+                myTableModel.setMycnt(cnt);
+                TableRowSorter <MyTableModel> sorter = new TableRowSorter<MyTableModel>(myTableModel);
+                sorter = new TableRowSorter<>(myTableModel);
+                jTable.setModel(myTableModel);
+                jTable.setRowSorter(sorter);
+
+                JScrollPane jScrollPane = new JScrollPane(jTable);
+
+                breadDialog = new JDialog();
+
+                JPanel panel = new JPanel(new BorderLayout());
+                JPanel panel2 = new JPanel();
+
+
+                panel.add(button_back, BorderLayout.WEST);
+                panel.add(buttonFilter, BorderLayout.EAST);
+                panel.add(filterText, BorderLayout.CENTER);
+
+                panel2.add(buttonDelete, BorderLayout.CENTER);
+
+
+                breadDialog.add(panel, BorderLayout.NORTH);
+                breadDialog.add(panel2, BorderLayout.SOUTH);
+                breadDialog.add(jScrollPane, BorderLayout.CENTER);
+                breadDialog.pack();
+                breadDialog.setVisible(true);
+            }
+        });
+        showMlk.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int cnt = 0;
+                myTableModel.P = false;
+                for (int i =  0 ; i < myTableModel.data.getCount();i++ )
+                {
+                    if (myTableModel.data.getProduct(i) instanceof Milk)
+                    {
+                        cnt++;
+                    }
+
+                }
+
+                myTableModel.setMycnt(cnt);
+
+                TableRowSorter <MyTableModel> sorter = new TableRowSorter<MyTableModel>(myTableModel);
+                sorter = new TableRowSorter<>(myTableModel);
+                jTable.setModel(myTableModel);
+                jTable.setRowSorter(sorter);
+
+                JScrollPane jScrollPane = new JScrollPane(jTable);
+
+                milkDialog = new JDialog();
+
+                JPanel panel = new JPanel(new BorderLayout());
+                JPanel panel2 = new JPanel();
+
+                panel.add(button_back, BorderLayout.WEST);
+                panel.add(buttonFilter, BorderLayout.EAST);
+                panel.add(filterText, BorderLayout.CENTER);
+
+                panel2.add(buttonDelete, BorderLayout.CENTER);
+
+
+
+
+                milkDialog.add(panel, BorderLayout.NORTH);
+                milkDialog.add(panel2, BorderLayout.SOUTH);
+                milkDialog.add(jScrollPane, BorderLayout.CENTER);
+                milkDialog.pack();
+                milkDialog.setVisible(true);
+
+            }
+        });
+        buttonAddBread.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialog = new JDialog();
+                dialog.setModal(true);
+                dialog.setSize(250, 270);
+                dialog.setTitle("Добавление");
+                dialog.setLocationRelativeTo(null);
+
+                JPanel grid = new JPanel();
+                grid.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                GridLayout gridLayout = new GridLayout(5, 2, 0, 15);
+                grid.setLayout(gridLayout);
+
+                grid.add(new JLabel("Название:"));
+                TextField textName = new TextField(20);
+                grid.add(textName);
+
+                grid.add(new JLabel("Кол-во:"));
+                TextField textCnt = new TextField(20);
+                grid.add(textCnt);
+
+                grid.add(new JLabel("Тип муки:"));
+                TextField textType = new TextField(20);
+                grid.add(textType);
+
+                JButton buttonAddDialog = new JButton("Добавить");
+                grid.add(buttonAddDialog);
+
+
+                buttonAddDialog.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+
+                        String name = textName.getText();
+                        String type = textType.getText();
+                        if (name.isEmpty() || type.isEmpty())
+                        {
+                            return;
+                        }
+                        int cnt;
+                        try
+                        {
+                            cnt = Integer.parseInt(textCnt.getText());
+                            myTableModel.addBread(name, cnt, type);
+
+                        }
+                        catch (NumberFormatException ex)
+                        {
+                            return;
+                        }
+
+                        dialog.dispose();
+
+                    }
+                });
+
+                dialog.getContentPane().add(grid);
+                dialog.setVisible(true);
+
+
+
+
+
+            }
+        });
+        buttonAddMlk.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialog = new JDialog();
+                dialog.setModal(true);
+                dialog.setSize(250, 270);
+                dialog.setTitle("Добавление");
+                dialog.setLocationRelativeTo(null);
+
+                JPanel grid = new JPanel();
+                grid.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                GridLayout gridLayout = new GridLayout(5, 2, 0, 15);
+                grid.setLayout(gridLayout);
+
+                grid.add(new JLabel("Название:"));
+                TextField textName = new TextField(20);
+                grid.add(textName);
+
+                grid.add(new JLabel("Кол-во:"));
+                TextField textCnt = new TextField(20);
+                grid.add(textCnt);
+
+                grid.add(new JLabel("Тип продукта:"));
+                TextField textType = new TextField(20);
+                grid.add(textType);
+
+                JButton buttonAddDialog = new JButton("Добавить");
+                grid.add(buttonAddDialog);
+
+
+                buttonAddDialog.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+
+                        String name = textName.getText();
+                        String type = textType.getText();
+
+                        if (name.isEmpty() || type.isEmpty())
+                        {
+                            return;
+                        }
+                        int cnt;
+                        try
+                        {
+                            cnt = Integer.parseInt(textCnt.getText());
+                            myTableModel.addMIlk(name, cnt, type);
+
+                        }
+                        catch (NumberFormatException ex)
+                        {
+                            return;
+                        }
+
+                        dialog.dispose();
+
+                    }
+                });
+
+                dialog.getContentPane().add(grid);
+                dialog.setVisible(true);
+
+            }
+        });
 
 
 
@@ -222,21 +446,21 @@ public class MainWindow extends JFrame {
 
 
 
-    public void myListers()
-    {
-        showMlk.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        showBread.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-    }
+//    public void myListers()
+//    {
+//        showMlk.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//
+//        showBread.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//    }
 
 }
