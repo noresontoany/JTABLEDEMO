@@ -5,8 +5,6 @@ import demo.data.Milk;
 import demo.data.Shop;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,14 +16,47 @@ public class MainWindow extends JFrame {
     private MyTableModel myTableModel;
     private JButton  buttonAddMlk;
     private JButton buttonAddBread;
-    private JButton  showMlk;
+    private JButton showMlk;
     private JButton showBread;
     private JButton buttonDelete;
     private JButton buttonFilter;
-    private JButton  button_back;
+    private JButton button_back;
     private JDialog milkDialog;
     private JDialog breadDialog ;
-    JTextField filterText;
+    private JDialog milkDialogAdd;
+    private JDialog breadDialogAdd;
+    private JTextField filterText;
+    private void myDispose()
+    {
+        try {
+            this.milkDialog.dispose();
+        }
+        catch (NullPointerException ex)
+        {
+            System.out.println();
+        }
+        try {
+            this.breadDialogAdd.dispose();
+        }
+        catch (NullPointerException ex)
+        {
+            System.out.println();
+        }
+        try {
+            this.milkDialogAdd.dispose();
+        }
+        catch (NullPointerException ex)
+        {
+            System.out.println();
+        }
+        try {
+            this.breadDialog.dispose();
+        }
+        catch (NullPointerException ex)
+        {
+            System.out.println();
+        }
+    }
 
     public MainWindow()
     {
@@ -74,8 +105,10 @@ public class MainWindow extends JFrame {
 
 
         showBread.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
+                myDispose();
                 int cnt = 0;
                 myTableModel.P = true;
                 for (int i =  0 ; i < myTableModel.data.getCount();i++ )
@@ -95,6 +128,7 @@ public class MainWindow extends JFrame {
                 JScrollPane jScrollPane = new JScrollPane(jTable);
 
                 breadDialog = new JDialog();
+//                breadDialog.setModal(true);
 
                 JPanel panel = new JPanel(new BorderLayout());
                 JPanel panel2 = new JPanel();
@@ -110,13 +144,63 @@ public class MainWindow extends JFrame {
                 breadDialog.add(panel, BorderLayout.NORTH);
                 breadDialog.add(panel2, BorderLayout.SOUTH);
                 breadDialog.add(jScrollPane, BorderLayout.CENTER);
+                breadDialog.setLocationRelativeTo(null);
                 breadDialog.pack();
                 breadDialog.setVisible(true);
+
+
+                buttonDelete.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try
+                        {
+                            myTableModel.delete(jTable.getSelectedRow());
+                        }
+                        catch (IndexOutOfBoundsException ex)
+                        {
+                            System.err.println("");
+                        }
+                    }
+                });
+
+                TableRowSorter<MyTableModel> finalSorter1 = sorter;
+                button_back.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        finalSorter1.setRowFilter(null);
+                    }
+                });
+
+                TableRowSorter<MyTableModel> finalSorter = sorter;
+                buttonFilter.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        String text = filterText.getText();
+                        if (text.isEmpty()) {
+                            finalSorter.setRowFilter(null);
+                        } else {
+                            try {
+
+                                finalSorter.setRowFilter(RowFilter.regexFilter(text, 0));
+
+                            } catch (PatternSyntaxException pse) {
+                                System.err.println("");
+                            }
+
+                        }
+                    }
+                });
+
+
+
             }
         });
         showMlk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+
+                myDispose();
+
                 int cnt = 0;
                 myTableModel.P = false;
                 for (int i =  0 ; i < myTableModel.data.getCount();i++ )
@@ -138,7 +222,7 @@ public class MainWindow extends JFrame {
                 JScrollPane jScrollPane = new JScrollPane(jTable);
 
                 milkDialog = new JDialog();
-
+//                milkDialog.setModal(true);
                 JPanel panel = new JPanel(new BorderLayout());
                 JPanel panel2 = new JPanel();
 
@@ -154,19 +238,64 @@ public class MainWindow extends JFrame {
                 milkDialog.add(panel, BorderLayout.NORTH);
                 milkDialog.add(panel2, BorderLayout.SOUTH);
                 milkDialog.add(jScrollPane, BorderLayout.CENTER);
+                milkDialog.setLocationRelativeTo(null);
                 milkDialog.pack();
                 milkDialog.setVisible(true);
+
+                buttonDelete.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try
+                        {
+                            myTableModel.delete(jTable.getSelectedRow());
+                        }
+                        catch (IndexOutOfBoundsException ex)
+                        {
+                            System.err.println("");
+
+                        }
+                    }
+                });
+
+                TableRowSorter<MyTableModel> finalSorter1 = sorter;
+                button_back.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            finalSorter1.setRowFilter(null);
+                        }
+                });
+
+                TableRowSorter<MyTableModel> finalSorter = sorter;
+                buttonFilter.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+
+                            String text = filterText.getText();
+                            if (text.isEmpty()) {
+                                finalSorter.setRowFilter(null);
+                            } else {
+                                try {
+
+                                    finalSorter.setRowFilter(RowFilter.regexFilter(text, 0));
+
+                                } catch (PatternSyntaxException pse) {
+                                    System.err.println("");
+                                }
+
+                            }
+                        }
+                });
 
             }
         });
         buttonAddBread.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialog = new JDialog();
-                dialog.setModal(true);
-                dialog.setSize(250, 270);
-                dialog.setTitle("Добавление");
-                dialog.setLocationRelativeTo(null);
+                myDispose();
+                breadDialogAdd = new JDialog();
+//                breadDialogAdd.setModal(true);
+                breadDialogAdd.setSize(250, 270);
+                breadDialogAdd.setTitle("Добавление");
+                breadDialogAdd.setLocationRelativeTo(null);
 
                 JPanel grid = new JPanel();
                 grid.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -186,6 +315,8 @@ public class MainWindow extends JFrame {
                 grid.add(textType);
 
                 JButton buttonAddDialog = new JButton("Добавить");
+
+
                 grid.add(buttonAddDialog);
 
 
@@ -193,11 +324,12 @@ public class MainWindow extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
 
-
                         String name = textName.getText();
                         String type = textType.getText();
                         if (name.isEmpty() || type.isEmpty())
                         {
+                            textName.setBackground(new Color(213, 28, 47, 95));
+                            textType.setBackground(new Color(213, 28, 47, 95));
                             return;
                         }
                         int cnt;
@@ -209,16 +341,19 @@ public class MainWindow extends JFrame {
                         }
                         catch (NumberFormatException ex)
                         {
+                            textCnt.setBackground(new Color(213, 28, 47, 95));
+                            textName.setBackground(new Color(40, 204, 40));
+                            textType.setBackground(new Color(40, 204, 40));
                             return;
                         }
-
-                        dialog.dispose();
+                        textCnt.setBackground(new Color(40, 204, 40));
+                        breadDialogAdd.dispose();
 
                     }
                 });
 
-                dialog.getContentPane().add(grid);
-                dialog.setVisible(true);
+                breadDialogAdd.getContentPane().add(grid);
+                breadDialogAdd.setVisible(true);
 
 
 
@@ -229,11 +364,15 @@ public class MainWindow extends JFrame {
         buttonAddMlk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog dialog = new JDialog();
-                dialog.setModal(true);
-                dialog.setSize(250, 270);
-                dialog.setTitle("Добавление");
-                dialog.setLocationRelativeTo(null);
+                myDispose();
+
+//                  dialogB = new BreadDialog(MainWindow.this, myTableModel);
+
+                milkDialogAdd = new JDialog();
+//                milkDialogAdd.setModal(true);
+                milkDialogAdd.setSize(250, 270);
+                milkDialogAdd.setTitle("Добавление");
+                milkDialogAdd.setLocationRelativeTo(null);
 
                 JPanel grid = new JPanel();
                 grid.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -266,6 +405,8 @@ public class MainWindow extends JFrame {
 
                         if (name.isEmpty() || type.isEmpty())
                         {
+                            textName.setBackground(new Color(213, 28, 47, 95));
+                            textType.setBackground(new Color(213, 28, 47, 95));
                             return;
                         }
                         int cnt;
@@ -277,16 +418,19 @@ public class MainWindow extends JFrame {
                         }
                         catch (NumberFormatException ex)
                         {
+                            textCnt.setBackground(new Color(213, 28, 47, 95));
+                            textName.setBackground(new Color(40, 204, 40));
+                            textType.setBackground(new Color(40, 204, 40));
                             return;
                         }
-
-                        dialog.dispose();
+                        textCnt.setBackground(new Color(40, 204, 40));
+                        milkDialogAdd.dispose();
 
                     }
                 });
 
-                dialog.getContentPane().add(grid);
-                dialog.setVisible(true);
+                milkDialogAdd.getContentPane().add(grid);
+                milkDialogAdd.setVisible(true);
 
             }
         });
@@ -297,7 +441,7 @@ public class MainWindow extends JFrame {
 //
 //        final TableRowSorter <MyTableModel> sorter = new TableRowSorter<MyTableModel>(myTableModelMilk);
 //
-////        TableRowSorter<MyTableModel> sorter = new TableRowSorter<>(myTableModel);
+////      TableRowSorter<MyTableModel> sorter = new TableRowSorter<>(myTableModel);
 //
 //        jTable.setModel(myTableModelMilk);
 //

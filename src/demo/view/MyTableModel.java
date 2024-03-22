@@ -5,6 +5,7 @@ import demo.data.Milk;
 import demo.data.Bread;
 import demo.data.Shop;
 
+import javax.lang.model.type.NullType;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
@@ -18,33 +19,34 @@ public class MyTableModel extends AbstractTableModel {
     public MyTableModel(Shop shop)
     {
         this.data = shop;
-
+        showAdding();
+    }
+    public void showAdding()
+    {
+        this.shopB.clear();
+        this.shopM.clear();
         for (int i =  0 ; i < data.getCount();i++ )
         {
-            if (data.getProduct(i) instanceof Milk)
+            if (this.data.getProduct(i) instanceof Milk)
             {
-                shopM.add((Milk)data.getProduct(i));
+                this.shopM.add((Milk)this.data.getProduct(i));
             }
             else
             {
-                shopB.add((Bread)data.getProduct(i));
+                this.shopB.add((Bread)this.data.getProduct(i));
             }
 
         }
-
     }
 
     public void setMycnt(int cnt)
     {
         this.Mycnt = cnt;
-
-
     }
 
 
     @Override
     public int getRowCount() {
-
 
         return Mycnt;
 
@@ -136,39 +138,107 @@ public class MyTableModel extends AbstractTableModel {
         return String.class;
 
     }
+    private boolean emptyaValue(Object aValue)
+    {
+        String s;
+        s = (String) aValue;
+        if (s.equals("")) {
 
+            return false;
+        }
+        return true;
+
+    }
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 
         try {
-            switch (columnIndex) {
-                case 0:
-                    data.getProduct(rowIndex).setName((String) aValue);
+            if(P) {
+                switch (columnIndex) {
+                    case 1:
+                        if (emptyaValue((String) aValue)) {
+                            shopB.get(rowIndex).setName((String) aValue);
+                            data.getProductID(shopB.get(rowIndex).getId()).setName((String) aValue);
+                            break;
+                        }
+                        else {
+                            break;
+                        }
 
-                case 1:
+
+                    case 2:
 //                    data.getProduct(rowIndex).setCountInt((Integer) aValue);
-                    data.getProduct(rowIndex).setCount((String) aValue);
 
-                case 2: {
-                    Product p = data.getProduct(rowIndex);
-                    if (p instanceof Milk) {
-                        ((Milk) p).setProd_type((String) aValue);
+                        shopB.get(rowIndex).setCount((String) aValue);
+                        data.getProductID(shopB.get(rowIndex).getId()).setCount((String) aValue);
+                        break;
+
+                    case 3: {
+                        if (emptyaValue((String) aValue)) {
+                            shopB.get(rowIndex).setFlour((String) aValue);
+                            Product p1 = data.getProductID(shopB.get(rowIndex).getId());
+                            ((Bread) p1).setFlour((String) aValue);
+                            break;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
 
                 }
-                case 3: {
-                    Product p = data.getProduct(rowIndex);
-                    if (p instanceof Bread) {
-                        ((Bread) p).setFlour((String) aValue);
-                    }
-
-                }
-
             }
-        }
+            else
+            {
+                switch (columnIndex) {
+                    case 1:
+                        if (emptyaValue((String) aValue)) {
+                            shopM.get(rowIndex).setName((String) aValue);
+                            data.getProductID(shopM.get(rowIndex).getId()).setName((String) aValue);
+                            break;
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                    case 2:
+//                    data.getProduct(rowIndex).setCountInt((Integer) aValue);
+                        shopM.get(rowIndex).setCount((String) aValue);
+                        data.getProductID(shopM.get(rowIndex).getId()).setCount((String) aValue);
+                        break;
+
+                    case 3: {
+                        if (emptyaValue((String) aValue)) {
+                            shopM.get(rowIndex).setProd_type((String) aValue);
+                            Product p1 = data.getProductID(shopM.get(rowIndex).getId());
+                            ((Milk) p1).setProd_type((String) aValue);
+                            break;
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                    }
+
+                }
+            }
+    }
+
         catch (ClassCastException ex)
         {
-            data.getProduct(rowIndex).setCountInt((Integer) aValue);
+            if (P)
+            {
+                shopB.get(rowIndex).setCountInt((Integer) aValue);
+                data.getProductID(shopB.get(rowIndex).getId()).setCountInt((Integer) aValue);
+            }
+            else
+            {
+                shopM.get(rowIndex).setCountInt((Integer) aValue);
+                data.getProductID(shopM.get(rowIndex).getId()).setCountInt((Integer) aValue);
+            }
+//            data.getProduct(rowIndex).setCountInt((Integer) aValue);
         }
     }
 
@@ -176,9 +246,9 @@ public class MyTableModel extends AbstractTableModel {
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         switch (columnIndex)
         {
-            case 0: return false;
-
             case 1, 2, 3: return true;
+
+            case 0 : return false;
         }
 
         return false;
@@ -186,18 +256,38 @@ public class MyTableModel extends AbstractTableModel {
 
     public void delete(int index)
     {
-        this.data.remove(index);
 
+        int id;
+        if (P)
+        {
+             id  = this.shopB.get(index).getId();
+             this.shopB.remove(index);
+
+        }
+        else
+        {
+             id  = this.shopM.get(index).getId();
+             this.shopM.remove(index);
+
+        }
+        this.Mycnt--;
+        this.data.removeID(id);
         fireTableDataChanged();
     }
 
     public void addMIlk(String name, int cnt, String type) {
+
+        this.Mycnt++;
         data.add(new Milk(name, cnt, type));
+        showAdding();
         this.fireTableDataChanged();
     }
 
     public void addBread(String name, int cnt, String type) {
+
+        this.Mycnt++;
         data.add(new Bread(name, cnt, type));
+        showAdding();
         this.fireTableDataChanged();
     }
 

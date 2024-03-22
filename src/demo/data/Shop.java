@@ -3,7 +3,7 @@ package demo.data;
 import java.util.ArrayList;
 
 public class Shop {
-    public  ArrayList<Product> products = new ArrayList<>();
+    private  ArrayList<Product> products = new ArrayList<>();
     public Shop()
     {
         products.add(new Milk("bread", 1,"ggg"));
@@ -28,10 +28,37 @@ public class Shop {
         return product;
     }
 
-    public Product remove(int index)
-    {
-        return products.remove(index);
+    public Product getProductID(int indexID) {
+        Product ret = null;
+        for (int i = 0; i < products.size(); i++)
+        {
+            if (products.get(i).getId() == indexID )
+            {
+                ret = products.get(i);
+                break;
+            }
+        }
+        return ret;
     }
+
+//    public Product remove(int index)
+//    {
+//        return products.remove(index);
+//    }
+
+    public Product removeID(int indexID) {
+        int ret = 0;
+        for (int i = 0; i < products.size(); i++)
+        {
+            if (products.get(i).getId() == indexID )
+            {
+                ret = i;
+                break;
+            }
+        }
+        return products.remove(ret);
+    }
+
 
 
     public void add(Product product)
