@@ -4,16 +4,14 @@ import java.util.ArrayList;
 
 public class Shop {
     private  ArrayList<Product> products = new ArrayList<>();
+    private DbFunctions db;
+    private  java.sql.Connection con;
     public Shop()
     {
-        products.add(new Milk("bread", 1,"ggg"));
-        products.add(new Bread("milky", 3,"ddd"));
-        products.add(new Milk("bread", 45,"sad"));
-        products.add(new Bread("milky", 56,"asd"));
-        products.add(new Milk("bread", 34,"asd"));
-        products.add(new Bread("milky", 234,"sdf"));
-        products.add(new Bread("milky", 223,"sdfsd"));
-        products.add(new Bread("milky", 123,"asd"));
+        this.db = new DbFunctions();
+        this.con  = db.connetinon_to_db("postgres", "123");
+        db.readData(con , "milk", "prod_type", products);
+        db.readData(con , "bread", "flour_type", products);
     }
 
 
@@ -28,11 +26,11 @@ public class Shop {
         return product;
     }
 
-    public Product getProductID(int indexID) {
+    public Product getProductRowCount(int indexID) {
         Product ret = null;
         for (int i = 0; i < products.size(); i++)
         {
-            if (products.get(i).getId() == indexID )
+            if (products.get(i).getRow_count() == indexID )
             {
                 ret = products.get(i);
                 break;
@@ -46,16 +44,19 @@ public class Shop {
 //        return products.remove(index);
 //    }
 
-    public Product removeID(int indexID) {
+    public Product removeRowCount(int indexID) {
         int ret = 0;
         for (int i = 0; i < products.size(); i++)
         {
-            if (products.get(i).getId() == indexID )
+            if (products.get(i).getRow_count() == indexID )
             {
-                ret = i;
+                ret = products.get(i).getId();
                 break;
             }
         }
+
+        db.deleteRow(con, "Products", ret);
+
         return products.remove(ret);
     }
 
@@ -64,5 +65,13 @@ public class Shop {
     public void add(Product product)
     {
         this.products.add(product);
+    }
+
+    public void reload() {
+        products.clear();
+        Product.rows_count = 0;
+        db.readData(con , "milk", "prod_type", products);
+        db.readData(con , "bread", "flour_type", products);
+
     }
 }

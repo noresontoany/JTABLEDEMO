@@ -4,13 +4,12 @@ public class Bread extends Product {
     protected String flour_type;
     public Bread()
     {
-        super("", 0);
-
+        super(0,"", 0);
     }
 
-    public Bread(String name, int count, String subject)
+    public Bread(int id, String name, int count, String subject)
     {
-        super(name, count);
+        super(id, name, count);
         this.flour_type = subject;
     }
 

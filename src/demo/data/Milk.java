@@ -12,12 +12,11 @@ public class Milk extends Product {
 
     public Milk()
     {
-        super("", 0);
-
+        super(0,"", 0);
     }
-    public Milk(String name, int count , String prod_type)
+    public Milk(int id , String name, int count , String prod_type)
     {
-        super(name, count);
+        super(id , name, count);
 
         this.prod_type = prod_type;
 

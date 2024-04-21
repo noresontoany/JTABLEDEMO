@@ -338,6 +338,8 @@ public class MainWindow extends JFrame {
                             cnt = Integer.parseInt(textCnt.getText());
                             myTableModel.addBread(name, cnt, type);
 
+
+
                         }
                         catch (NumberFormatException ex)
                         {

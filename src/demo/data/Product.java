@@ -3,16 +3,22 @@ package demo.data;
 public abstract class Product {
     protected String name;
     protected int count;
-    protected static int id_count;
+    protected static int rows_count;
+    protected int row_count;
     protected int id;
 
 
-    public Product(String name, int count)
+
+    public Product(int id,String name, int count)
     {
+        this.id  = id;
         this.count = count;
         this.name = name;
-        this.id_count++;
-        this.id = id_count;
+        rows_count++;
+        this.row_count = rows_count;
+
+
+
     }
 
     public String getName() {
@@ -21,6 +27,9 @@ public abstract class Product {
 
     public void setName(String name) {
         this.name = name;
+
+
+
     }
 
     public int getCount() {
@@ -44,9 +53,16 @@ public abstract class Product {
         this.count = count;
     }
 
+    public int getRow_count()
+    {
+        return row_count;
+    }
+
     public int getId()
     {
-        return id;
+
+        return this.id;
     }
+
 }
 
