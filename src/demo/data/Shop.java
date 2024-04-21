@@ -26,46 +26,46 @@ public class Shop {
         return product;
     }
 
-    public Product getProductRowCount(int indexID) {
-        Product ret = null;
-        for (int i = 0; i < products.size(); i++)
-        {
-            if (products.get(i).getRow_count() == indexID )
-            {
-                ret = products.get(i);
-                break;
-            }
-        }
-        return ret;
-    }
+//    public Product getProductRowCount(int indexID) {
+//        Product ret = null;
+//        for (int i = 0; i < products.size(); i++)
+//        {
+//            if (products.get(i).getRow_count() == indexID )
+//            {
+//                ret = products.get(i);
+//                break;
+//            }
+//        }
+//        return ret;
+//    }
 
 //    public Product remove(int index)
 //    {
 //        return products.remove(index);
 //    }
 
-    public Product removeRowCount(int indexID) {
-        int ret = 0;
-        for (int i = 0; i < products.size(); i++)
-        {
-            if (products.get(i).getRow_count() == indexID )
-            {
-                ret = products.get(i).getId();
-                break;
-            }
-        }
+//    public Product removeRowCount(int indexID) {
+//        int ret = 0;
+//        for (int i = 0; i < products.size(); i++)
+//        {
+//            if (products.get(i).getRow_count() == indexID )
+//            {
+//                ret = products.get(i).getId();
+//                break;
+//            }
+//        }
+//
+//        db.deleteRow(con, "Products", ret);
+//
+//        return products.remove(ret);
+//    }
 
-        db.deleteRow(con, "Products", ret);
-
-        return products.remove(ret);
-    }
 
 
-
-    public void add(Product product)
-    {
-        this.products.add(product);
-    }
+//    public void add(Product product)
+//    {
+//        this.products.add(product);
+//    }
 
     public void reload() {
         products.clear();

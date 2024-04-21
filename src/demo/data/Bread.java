@@ -17,9 +17,9 @@ public class Bread extends Product {
         return flour_type;
     }
 
-    public void setFlour(java.lang.String subject) {
-        this.flour_type = subject;
-    }
+//    public void setFlour(java.lang.String subject) {
+//        this.flour_type = subject;
+//    }
 
 
 

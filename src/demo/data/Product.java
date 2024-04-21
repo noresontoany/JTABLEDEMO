@@ -48,10 +48,10 @@ public abstract class Product {
             }
     }
 
-    public void setCountInt(Integer count)
-    {
-        this.count = count;
-    }
+//    public void setCountInt(Integer count)
+//    {
+//        this.count = count;
+//    }
 
     public int getRow_count()
     {

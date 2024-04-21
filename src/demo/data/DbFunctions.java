@@ -30,50 +30,50 @@ public class DbFunctions {
 
         return  con;
     }
-    public void createTable(java.sql.Connection con, String tableName)
-    {
-        Statement statement;
-        try
-        {
-            String query  = "create table " + tableName + "(Id SERIAL PRIMARY KEY, \n" +
-                    "\n" +
-                    "                                              name varchar, count int );";
-            try {
-                statement = con.createStatement();
-                statement.execute(query);
-            } catch (SQLException e) {
-                System.out.println("error sql CREATE1");
-            }
-
-        }
-        catch (Exception e) {
-            System.out.println("error sql CREATE2");
-        }
-    }
-
-    public void createTable(java.sql.Connection con, String tableName , String type)
-    {
-        Statement statement;
-
-        try
-        {
-            String query = "create table " + tableName + "(Id SERIAL PRIMARY KEY, \n" +
-                     "\n" +
-                     "                                              "+ type + " varchar, productId INTEGER REFERENCES products (id) ON DELETE CASCADE);";
-
-
-            try {
-                statement = con.createStatement();
-                statement.execute(query);
-            } catch (SQLException e) {
-                System.out.println("error sql CREATE1");
-            }
-
-        }
-        catch (Exception e) {
-            System.out.println("error sql CREATE2");
-        }
-    }
+//    public void createTable(java.sql.Connection con, String tableName)
+//    {
+//        Statement statement;
+//        try
+//        {
+//            String query  = "create table " + tableName + "(Id SERIAL PRIMARY KEY, \n" +
+//                    "\n" +
+//                    "                                              name varchar, count int );";
+//            try {
+//                statement = con.createStatement();
+//                statement.execute(query);
+//            } catch (SQLException e) {
+//                System.out.println("error sql CREATE1");
+//            }
+//
+//        }
+//        catch (Exception e) {
+//            System.out.println("error sql CREATE2");
+//        }
+//    }
+//
+//    public void createTable(java.sql.Connection con, String tableName , String type)
+//    {
+//        Statement statement;
+//
+//        try
+//        {
+//            String query = "create table " + tableName + "(Id SERIAL PRIMARY KEY, \n" +
+//                     "\n" +
+//                     "                                              "+ type + " varchar, productId INTEGER REFERENCES products (id) ON DELETE CASCADE);";
+//
+//
+//            try {
+//                statement = con.createStatement();
+//                statement.execute(query);
+//            } catch (SQLException e) {
+//                System.out.println("error sql CREATE1");
+//            }
+//
+//        }
+//        catch (Exception e) {
+//            System.out.println("error sql CREATE2");
+//        }
+//    }
 
     public void insertIntoTable(java.sql.Connection con, String tableName, String name , int count, String typeValue, String type)
     {
@@ -142,36 +142,36 @@ public class DbFunctions {
         }
     }
 
-    public  void  searchByName(java.sql.Connection con , String table_name,int id)
-    {
-        Statement statement;
-        ResultSet rs=null;
-        //try
-        //{
-            String query = String.format("select * from %s where id= '%d'",table_name, id);
-        try {
-            statement = con.createStatement();
-
-
-
-        rs = statement.executeQuery(query);
-            while (rs.next())
-            {
-                System.out.println(rs.getString("id") + " ");
-                System.out.println(rs.getString("name") + " ");
-                System.out.println(rs.getString("count") + " ");
-                System.out.println(rs.getString("prod_type") + " ");
-
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-       // }
-        //catch (Exception ex)
-        //{
-         //   System.out.println("search error");
-        //}
-    }
+//    public  void  searchByName(java.sql.Connection con , String table_name,int id)
+//    {
+//        Statement statement;
+//        ResultSet rs=null;
+//        //try
+//        //{
+//            String query = String.format("select * from %s where id= '%d'",table_name, id);
+//        try {
+//            statement = con.createStatement();
+//
+//
+//
+//        rs = statement.executeQuery(query);
+//            while (rs.next())
+//            {
+//                System.out.println(rs.getString("id") + " ");
+//                System.out.println(rs.getString("name") + " ");
+//                System.out.println(rs.getString("count") + " ");
+//                System.out.println(rs.getString("prod_type") + " ");
+//
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//       // }
+//        //catch (Exception ex)
+//        //{
+//         //   System.out.println("search error");
+//        //}
+//    }
 
     public void deleteRow(java.sql.Connection con, String table_name, int id)
     {
